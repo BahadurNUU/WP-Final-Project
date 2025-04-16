@@ -1,14 +1,15 @@
-import { useEffect, useState } from 'react';
-import { Container, Form, Button, Card } from 'react-bootstrap';
-import { ToastContainer, toast } from 'react-toastify';
-import {useFetch} from '../hooks/useFetch';
-import { useNavigate } from 'react-router';
+import { useState, useEffect } from "react";
+import { useFetch } from "../hooks/useFetch";
+import { Container, Form, Button, Card } from "react-bootstrap";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
-export default function LoginPage() {
-  const navigate = useNavigate()
+export default function RegisterPage() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: '',
-    password: ''
+    password: '',
+    username: ''
   });
   const { request, loading, error, clearError } = useFetch();
 
@@ -19,22 +20,15 @@ export default function LoginPage() {
     }
   }, [error]);
 
-  const formValidation = () => {
-    if (form.email === '' || form.password === '') {
-      toast.warning('Пожалуйста, заполните все поля')
-      return false
-    }
-    return true
-  }
-
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     const isValid = formValidation();
 
     if (isValid) {
       try {
-        const data = await request('/api/auth/login', 'POST', { email: form.email, password: form.password });
+        const data = await request('/api/auth/register', 'POST', { email: form.email, password: form.password });
+        
         if (!error && data) {
-          toast('Пользователь успешно авторизован')
+            toast('Пользователь успешно создан')
         }
         console.log(data);
       } catch (err) {
@@ -42,10 +36,19 @@ export default function LoginPage() {
       } finally {
         setForm({
           email: '',
-          password: ''
+          password: '',
+          username: ''
         });
       }
     }
+  }
+
+  const formValidation = () => {
+    if (form.email === '' || form.password === '') {
+      toast.warning('Пожалуйста, заполните все поля')
+      return false
+    }
+    return true
   }
 
   const handleInputChange = (e) => {
@@ -60,8 +63,20 @@ export default function LoginPage() {
     <Container className="d-flex justify-content-center align-items-center min-vh-100">
       <Card className="p-4" style={{ width: '400px' }}>
         <Card.Body>
-          <h2 className="text-center mb-4">Welcome to our app</h2>
+          <h2 className="text-center mb-4">Create an account</h2>
           <Form>
+            <Form.Group className="mb-3" controlId="name">
+              <Form.Label>Full name</Form.Label>
+              <Form.Control
+                type="text"
+                name="username"
+                placeholder="Peter Parker"
+                value={form.username}
+                onChange={handleInputChange}
+                required
+              />
+            </Form.Group>
+
             <Form.Group className="mb-3" controlId="email">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -86,17 +101,17 @@ export default function LoginPage() {
               />
             </Form.Group>
 
-            <Button onClick={handleLogin} variant="primary" className="w-100 mt-4">
-              Log In
+            <Button onClick={handleRegister} variant="primary" className="w-100 mt-4">
+              Register
             </Button>
           </Form>
-          <p className='mt-4'>
-            Don't have an account?
-            <Button variant="link" onClick={() => navigate("/register")}>Register</Button>
+          <p className="mt-4">
+            Already have an account?
+            <Button variant="link" onClick={() => navigate("/")}>Log in</Button>
           </p>
         </Card.Body>
       </Card>
       <ToastContainer/>
     </Container>
-  );
-};
+  )
+}

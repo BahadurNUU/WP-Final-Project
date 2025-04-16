@@ -17,6 +17,7 @@ export default function Navbar() {
                         <Nav.Link as={Link} to="/">Home</Nav.Link>
                         <Nav.Link as={Link} to="/create">Create</Nav.Link>
                         <Nav.Link as={Link} to="/profile">Profile</Nav.Link>
+                        <Nav.Link as={Link} to="/bookmarks">Bookmarks</Nav.Link>
                     </Nav>
                     <Button 
                         variant="light" 
