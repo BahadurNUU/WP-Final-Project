@@ -3,7 +3,7 @@ import AppRouter from './AppRouter';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   return (
     <div className="App">
