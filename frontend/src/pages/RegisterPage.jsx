@@ -25,12 +25,12 @@ export default function RegisterPage() {
 
     if (isValid) {
       try {
-        const data = await request('/api/auth/register', 'POST', { email: form.email, password: form.password });
+        const data = await request('/api/auth/register', 'POST', { username: form.username, email: form.email, password: form.password });
         
         if (!error && data) {
             toast('Пользователь успешно создан')
         }
-        console.log(data);
+      
       } catch (err) {
         console.log('catch', err);
       } finally {
@@ -107,7 +107,7 @@ export default function RegisterPage() {
           </Form>
           <p className="mt-4">
             Already have an account?
-            <Button variant="link" onClick={() => navigate("/")}>Log in</Button>
+            <Button disabled={loading} variant="link" onClick={() => navigate("/")}>Log in</Button>
           </p>
         </Card.Body>
       </Card>
