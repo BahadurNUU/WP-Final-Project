@@ -19,6 +19,18 @@ import java.util.Optional;
 @RequestMapping("/api/auth")
 public class AuthController {
 
+    @PostMapping("/test")
+    public ResponseEntity<?> testMongoConnection() {
+        User testUser = new User();
+        testUser.setFullName("Mongo Test123");
+        testUser.setEmail("mongoSecond@test.com");
+        testUser.setPassword("123456");
+
+        userRepository.save(testUser);
+        return ResponseEntity.ok("MongoDB connection successful! User saved.");
+    }
+
+
     @Autowired
     private UserRepository userRepository;
 
