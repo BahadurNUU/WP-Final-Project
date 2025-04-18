@@ -5,15 +5,40 @@ import {
     Chat, 
     Bookmark, 
     BookmarkFill,
-    PersonCircle
+    PersonCircle,
+    VolumeUp,
+    VolumeMute
 } from 'react-bootstrap-icons';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+
 
 export default function PostCard({ post }) {
     const [isLiked, setIsLiked] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [showComments, setShowComments] = useState(false);
     const [newComment, setNewComment] = useState('');
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const [voices, setVoices] = useState([]);
+
+    useEffect(() => {
+        const availableVoices = window.speechSynthesis.getVoices();
+        if (availableVoices.length > 0) {
+            setVoices(availableVoices);
+        }
+
+        const handleVoicesChanged = () => {
+            const newVoices = window.speechSynthesis.getVoices();
+            setVoices(newVoices);
+        };
+
+        window.speechSynthesis.onvoiceschanged = handleVoicesChanged;
+
+        return () => {
+            window.speechSynthesis.onvoiceschanged = null;
+        };
+    }, []);
+
     const [comments, setComments] = useState([
         {
             id: 1,
@@ -49,6 +74,29 @@ export default function PostCard({ post }) {
             setComments([...comments, comment]);
             setNewComment('');
         }
+    };
+
+    const handleReadAloud = () => {
+        if (isSpeaking) {
+            window.speechSynthesis.cancel();
+            setIsSpeaking(false);
+            return;
+        }
+
+        const speech = new SpeechSynthesisUtterance();
+        const defaultVoice = voices.find(v => v.name === 'Саманта');
+        console.log(defaultVoice)
+        console.log(voices);
+        
+        if (defaultVoice) {
+            speech.voice = defaultVoice;
+        }
+        speech.text = `${post.title}. ${post.content}`;
+        speech.onend = () => setIsSpeaking(false);
+        speech.onerror = () => setIsSpeaking(false);
+        
+        window.speechSynthesis.speak(speech);
+        setIsSpeaking(true);
     };
 
     return (
@@ -91,6 +139,15 @@ export default function PostCard({ post }) {
                             className="d-flex align-items-center"
                         >
                             {isBookmarked ? <BookmarkFill /> : <Bookmark />}
+                        </Button>
+                        <Button 
+                            variant={isSpeaking ? "primary" : "outline-secondary"} 
+                            size="sm"
+                            onClick={handleReadAloud}
+                            className="d-flex align-items-center"
+                            title="Read Aloud"
+                        >
+                            {isSpeaking ? <VolumeMute /> : <VolumeUp />}
                         </Button>
                     </div>
                 </div>

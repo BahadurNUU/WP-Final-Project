@@ -60,7 +60,7 @@ export default function LoginPage() {
     <Container className="d-flex justify-content-center align-items-center min-vh-100">
       <Card className="p-4" style={{ width: '400px' }}>
         <Card.Body>
-          <h2 className="text-center mb-4">Welcome to our app</h2>
+          <h2 className="text-center mb-4">Welcome to DevLogs</h2>
           <Form>
             <Form.Group className="mb-3" controlId="email">
               <Form.Label>Email address</Form.Label>
@@ -92,7 +92,7 @@ export default function LoginPage() {
           </Form>
           <p className='mt-4'>
             Don't have an account?
-            <Button variant="link" onClick={() => navigate("/register")}>Register</Button>
+            <Button disabled={loading} variant="link" onClick={() => navigate("/register")}>Register</Button>
           </p>
         </Card.Body>
       </Card>
