@@ -22,7 +22,7 @@ public class AuthController {
     @PostMapping("/test")
     public ResponseEntity<?> testMongoConnection() {
         User testUser = new User();
-        testUser.setFullName("Mongo Test123");
+        testUser.setUsername("Mongo Test123");
         testUser.setEmail("mongoSecond@test.com");
         testUser.setPassword("123456");
 
@@ -54,7 +54,7 @@ public class AuthController {
         User newUser = new User();
         newUser.setEmail(request.getEmail());
         newUser.setPassword(request.getPassword());
-        newUser.setFullName(request.getFullName());
+        newUser.setUsername(request.getFullName());
 
         userRepository.save(newUser);
 
