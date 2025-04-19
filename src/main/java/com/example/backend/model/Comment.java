@@ -12,7 +12,7 @@ public class Comment {
 
     private String postId;
     private String content;
-    private LocalDateTime createdAt; // ✅ added
+    private LocalDateTime createdAt;
 
     // Constructors
     public Comment() {

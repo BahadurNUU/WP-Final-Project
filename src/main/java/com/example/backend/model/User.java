@@ -19,13 +19,13 @@ public class User {
 
     private String password;
 
-    private String image; // profile image URL
+    private String image;
 
-    private String bio; // short description about the user
+    private String bio;
 
     private Date createdAt;
 
-    private List<String> bookmarks; // list of post IDs
+    private List<String> bookmarks;
 
     // Constructors, Getters and Setters
     public User() {

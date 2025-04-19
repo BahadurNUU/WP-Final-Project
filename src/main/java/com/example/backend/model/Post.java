@@ -11,12 +11,12 @@ public class Post {
     @Id
     private String id;
 
-    private String title;       // ✅ added
+    private String title;
     private String content;
     private int likes;
     private boolean bookmarked;
-    private LocalDateTime createdAt; // ✅ added
-    private List<String> commentIds; // optional list
+    private LocalDateTime createdAt;
+    private List<String> commentIds;
 
     // Constructors
     public Post() {

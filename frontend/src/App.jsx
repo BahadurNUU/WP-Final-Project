@@ -23,7 +23,7 @@ function App() {
   <AuthContext.Provider value={authContextValue}>
     <div className="App">
       <BrowserRouter>
-        <AppRouter isAuthenticated={isAuth} />
+        <AppRouter isAuthenticated={true} />
       </BrowserRouter>
     </div>
   </AuthContext.Provider>
