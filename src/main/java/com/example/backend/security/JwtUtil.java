@@ -31,5 +31,13 @@ public class JwtUtil {
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();
-}
+    }
+    public static String validateTokenAndGetEmail(String token) {
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject(); // subject = email we set earlier
+    }
 }

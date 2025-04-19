@@ -15,7 +15,7 @@ function App() {
     logout,
     isAuthenticated: isAuth
   }
-  console.log('isAuthenticated', isAuthenticated)
+  console.log('isAuth', isAuth)
 
   if (!ready) return <Loader/>
 
