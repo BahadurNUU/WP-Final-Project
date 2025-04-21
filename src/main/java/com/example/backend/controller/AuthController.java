@@ -4,6 +4,7 @@ import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.response.LoginResponse;
 import com.example.backend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,7 +40,9 @@ public class AuthController {
         Optional<User> user = userRepository.findByEmail(request.getEmail());
         if (user.isPresent() && user.get().getPassword().equals(request.getPassword())) {
             String token = JwtUtil.generateToken(user.get().getEmail());
-            return ResponseEntity.ok(token);
+            String userId = user.get().getId();
+            LoginResponse response = new LoginResponse(token, userId);
+            return ResponseEntity.ok(response);
         }
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
