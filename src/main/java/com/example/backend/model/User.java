@@ -27,7 +27,6 @@ public class User {
 
     private List<String> bookmarks;
 
-    // Constructors, Getters and Setters
     public User() {
         this.createdAt = new Date();
     }

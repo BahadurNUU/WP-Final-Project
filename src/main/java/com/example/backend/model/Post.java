@@ -18,12 +18,10 @@ public class Post {
     private LocalDateTime createdAt;
     private List<String> commentIds;
 
-    // Constructors
     public Post() {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

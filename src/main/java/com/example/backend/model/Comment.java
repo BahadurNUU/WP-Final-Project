@@ -14,7 +14,6 @@ public class Comment {
     private String content;
     private LocalDateTime createdAt;
 
-    // Constructors
     public Comment() {
         this.createdAt = LocalDateTime.now();
     }
@@ -25,7 +24,6 @@ public class Comment {
         this.createdAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 
