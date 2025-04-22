@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Container, Form, Button, Card, Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import { useFetch } from '../hooks/useFetch';
 import { ToastContainer, toast } from 'react-toastify';
+import { AuthContext } from '../context/AuthContext';
 
 export default function CreatePage() {
     const [title, setTitle] = useState('');
@@ -10,7 +11,8 @@ export default function CreatePage() {
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const { request, loading, error, clearError } = useFetch();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const auth = useContext(AuthContext);
 
     useEffect(() => {
         if (error) {
@@ -43,6 +45,7 @@ export default function CreatePage() {
             const formData = new FormData();
             formData.append('title', title);
             formData.append('content', content);
+            formData.append('userId', auth.userId);
             if (image) {
                 formData.append('image', image);
             }
