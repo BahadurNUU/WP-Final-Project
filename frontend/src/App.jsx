@@ -1,33 +1,20 @@
-import { BrowserRouter } from 'react-router';
-import AppRouter from './AppRouter';
 import Loader from './components/Loader';
-import { useAuth } from './hooks/useAuth';
+import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
+import { useRoutes } from './AppRouter';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const { token, userId, ready, login, logout } = useAuth();
-  const isAuth = !!token;
-  const authContextValue = {
-    token,
-    userId,
-    login,
-    logout,
-    isAuthenticated: isAuth
-  }
-  console.log('isAuth', isAuth)
+  const { ready, isAuthenticated } = useContext(AuthContext);
+  const routes = useRoutes(isAuthenticated);
+  
+	if (!ready) return <Loader />
 
-  if (!ready) return <Loader/>
-
-  return (
-  <AuthContext.Provider value={authContextValue}>
-    <div className="App">
-      <BrowserRouter>
-        <AppRouter isAuthenticated={true} />
-      </BrowserRouter>
-    </div>
-  </AuthContext.Provider>
-  )
+	return (
+			<div className='App'>
+				{ routes }
+			</div>
+	)
 }
 
-export default App
+export default App;

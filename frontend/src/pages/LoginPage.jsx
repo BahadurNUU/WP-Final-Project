@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Container, Form, Button, Card } from 'react-bootstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import {useFetch} from '../hooks/useFetch';
 import { useNavigate } from 'react-router';
+import { AuthContext } from '../context/AuthContext';
 
 export default function LoginPage() {
   const navigate = useNavigate()
@@ -10,6 +11,7 @@ export default function LoginPage() {
     email: '',
     password: ''
   });
+  const auth = useContext(AuthContext);
   const { request, loading, error, clearError } = useFetch();
 
   useEffect(() => {
@@ -34,9 +36,11 @@ export default function LoginPage() {
       try {
         const data = await request('/api/auth/login', 'POST', { email: form.email, password: form.password });
         if (!error && data) {
+          console.log('data', data);
+          auth.login(data.userId, data.token);
           toast('Пользователь успешно авторизован')
         }
-        console.log(data);
+       
       } catch (err) {
         console.log('catch', err);
       } finally {

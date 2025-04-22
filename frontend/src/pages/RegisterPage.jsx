@@ -25,12 +25,11 @@ export default function RegisterPage() {
 
     if (isValid) {
       try {
-        const data = await request('/api/auth/register', 'POST', { username: form.username, email: form.email, password: form.password });
-        
+        const data = await request('/api/auth/register', 'POST', { username: form.username, email: form.email, password: form.password }); 
         if (!error && data) {
-            toast('Пользователь успешно создан')
+          toast('Пользователь успешно создан')
+          navigate('/login')
         }
-      
       } catch (err) {
         console.log('catch', err);
       } finally {

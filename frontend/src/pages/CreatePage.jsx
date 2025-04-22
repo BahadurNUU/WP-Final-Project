@@ -51,7 +51,6 @@ export default function CreatePage() {
 
             if (data) {
                 toast.success('Post created successfully!');
-                navigate('/');
             }
         } catch (err) {
             console.error('Error creating post:', err);
