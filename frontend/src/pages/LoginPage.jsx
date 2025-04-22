@@ -37,8 +37,8 @@ export default function LoginPage() {
         const data = await request('/api/auth/login', 'POST', { email: form.email, password: form.password });
         if (!error && data) {
           console.log('data', data);
-          auth.login(data.userId, data.token);
-          toast('Пользователь успешно авторизован')
+          auth.login(data.userId, data.token, data.username);
+          toast('User successfully logged in');
         }
        
       } catch (err) {
