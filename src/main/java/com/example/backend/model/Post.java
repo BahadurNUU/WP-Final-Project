@@ -18,6 +18,9 @@ public class Post {
     private LocalDateTime createdAt;
     private List<String> commentIds;
 
+    private String author;
+    private String userId;
+
     public Post() {
         this.createdAt = LocalDateTime.now();
     }
@@ -33,6 +36,12 @@ public class Post {
 
     public int getLikes() { return likes; }
     public void setLikes(int likes) { this.likes = likes; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public String getAuthor() { return author; }
+    public void setAuthor(String author) { this.author = author; }
 
     public boolean isBookmarked() { return bookmarked; }
     public void setBookmarked(boolean bookmarked) { this.bookmarked = bookmarked; }

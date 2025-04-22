@@ -1,7 +1,9 @@
 package com.example.backend.controller;
 
 import com.example.backend.model.Post;
+import com.example.backend.model.User;
 import com.example.backend.repository.PostRepository;
+import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,8 @@ public class PostController {
 
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public List<Post> getAllPosts() {
@@ -27,12 +31,19 @@ public class PostController {
     public ResponseEntity<Post> createPost(
             @RequestParam("title") String title,
             @RequestParam("content") String content,
+            @RequestParam("userId") String userId,
             @RequestParam(value = "image", required = false) MultipartFile imageFile
     ) throws IOException {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+
         Post post = new Post();
         post.setTitle(title);
         post.setContent(content);
         post.setLikes(0);
+        post.setUserId(user.getId());
+        post.setAuthor(user.getUsername());
 
         if (imageFile != null && !imageFile.isEmpty()) {
             post.setImage(imageFile.getBytes());

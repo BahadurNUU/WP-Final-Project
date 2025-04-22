@@ -3,12 +3,15 @@ package com.example.backend.controller;
 import com.example.backend.dto.UpdateProfileRequest;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.response.GenericResponse;
 import com.example.backend.response.UserProfileResponse;
 import com.example.backend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Base64;
 import java.util.Optional;
@@ -37,38 +40,39 @@ public class ProfileController {
                         u.getCreatedAt()
                 ));
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GenericResponse("User not found"));
             }
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new GenericResponse("Invalid token"));
         }
     }
 
-    @PutMapping
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateProfile(@RequestHeader("Authorization") String authHeader,
-                                           @RequestBody UpdateProfileRequest request) {
+                                           @RequestParam(value = "username", required = false) String username,
+                                           @RequestParam(value = "bio", required = false) String bio,
+                                           @RequestParam(value = "image", required = false) MultipartFile imageFile) {
         try {
-            String token = authHeader.replace("Bearer ", "");
-            String email = JwtUtil.validateTokenAndGetEmail(token);
+            String email = JwtUtil.validateTokenAndGetEmail(authHeader.replace("Bearer ", ""));
+            Optional<User> optionalUser = userRepository.findByEmail(email);
 
-            Optional<User> user = userRepository.findByEmail(email);
-            if (user.isPresent()) {
-                User u = user.get();
-                if (request.getUsername() != null) u.setUsername(request.getUsername());
-                if (request.getBio() != null) u.setBio(request.getBio());
-                if (request.getImage() != null) {
-                    byte[] imageBytes = Base64.getDecoder().decode(request.getImage());
-                    u.setImage(imageBytes);
+            if (optionalUser.isPresent()) {
+                User user = optionalUser.get();
+
+                if (username != null) user.setUsername(username);
+                if (bio != null) user.setBio(bio);
+                if (imageFile != null && !imageFile.isEmpty()) {
+                    user.setImage(imageFile.getBytes());
                 }
 
-
-                userRepository.save(u);
-                return ResponseEntity.ok("Profile updated successfully");
+                userRepository.save(user);
+                return ResponseEntity.ok(new GenericResponse("Profile updated successfully"));
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GenericResponse("User not found"));
             }
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new GenericResponse("Failed to update profile"));
         }
     }
 

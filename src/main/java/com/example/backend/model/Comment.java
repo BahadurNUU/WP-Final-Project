@@ -14,18 +14,29 @@ public class Comment {
     private String content;
     private LocalDateTime createdAt;
 
+    private String author;
+    private String userId;
+
     public Comment() {
         this.createdAt = LocalDateTime.now();
     }
 
-    public Comment(String postId, String content) {
+    public Comment(String postId, String content,String author,String userId) {
         this.postId = postId;
         this.content = content;
         this.createdAt = LocalDateTime.now();
+        this.userId = userId;
+        this.author = author;
     }
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
+
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
+
+    public String getAuthor() { return author; }
+    public void setAuthor(String author) { this.author = author; }
 
     public String getPostId() { return postId; }
     public void setPostId(String postId) { this.postId = postId; }
