@@ -4,6 +4,7 @@ import com.example.backend.dto.LoginRequest;
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.response.GenericResponse;
 import com.example.backend.response.LoginResponse;
 import com.example.backend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,18 +41,19 @@ public class AuthController {
         Optional<User> user = userRepository.findByEmail(request.getEmail());
         if (user.isPresent() && user.get().getPassword().equals(request.getPassword())) {
             String token = JwtUtil.generateToken(user.get().getEmail());
+            String username = user.get().getUsername();
             String userId = user.get().getId();
-            LoginResponse response = new LoginResponse(token, userId);
+            LoginResponse response = new LoginResponse(token, userId, username);
             return ResponseEntity.ok(response);
         }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new GenericResponse("Invalid credentials"));
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            return ResponseEntity.badRequest().body("Email already in use");
+            return ResponseEntity.badRequest().body(new GenericResponse("Email already in use"));
         }
 
         User newUser = new User();
@@ -61,6 +63,6 @@ public class AuthController {
 
         userRepository.save(newUser);
 
-        return ResponseEntity.ok("User registered successfully");
+        return ResponseEntity.ok(new GenericResponse("User registered successfully"));
     }
 }
