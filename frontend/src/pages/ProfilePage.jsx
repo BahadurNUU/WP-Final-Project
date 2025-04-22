@@ -62,7 +62,7 @@ export default function ProfilePage() {
 		e.preventDefault();
 		try {
 			const formData = new FormData();
-			formData.append('username', user.name);
+			formData.append('username', user.username);
 			formData.append('email', user.email);
 			formData.append('bio', user.bio);
 			if (image) {
@@ -140,7 +140,7 @@ export default function ProfilePage() {
 										<Form.Label>Name</Form.Label>
 										<Form.Control
 											type='text'
-											name='name'
+											name='username'
 											value={formData.username}
 											onChange={handleInputChange}
 											required
@@ -189,7 +189,7 @@ export default function ProfilePage() {
 								<div>
 									<div className='d-flex justify-content-between align-items-start mb-3'>
 										<div>
-											<h2 className='mb-1'>{user.name}</h2>
+											<h2 className='mb-1'>{user.username}</h2>
 											<p className='text-muted mb-2'>{user.email}</p>
 											<p className='mb-3'>{user.bio}</p>
 											<small className='text-muted'>
