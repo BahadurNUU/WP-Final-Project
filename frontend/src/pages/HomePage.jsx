@@ -1,4 +1,4 @@
-import { Container } from 'react-bootstrap';
+import { Col, Row, Container } from 'react-bootstrap';
 import PostCard from '../components/PostCard';
 import { useEffect, useState } from 'react';
 import { useFetch } from '../hooks/useFetch';
@@ -33,9 +33,18 @@ export default function HomePage() {
     return (
         <Container className="py-4">
         <h1 className="mb-4">Недавние посты</h1>
-        {posts && posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+
+        <Container>
+          <Row>
+            {posts && posts.map((post, index) => (
+            <Col key={index} xs={12} sm={6} md={4} className="mb-4">
+                <PostCard key={post.id} post={post} />
+            </Col>
         ))}
+          </Row>
+        </Container>
+
+
         {posts.length === 0 && (
             <div className="text-center">
                 <h2>No posts here yet</h2>

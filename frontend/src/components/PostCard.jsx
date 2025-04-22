@@ -10,10 +10,14 @@ import {
     VolumeMute
 } from 'react-bootstrap-icons';
 import { useState, useEffect } from 'react';
+import { useFetch } from '../hooks/useFetch';
 
 
 
 export default function PostCard({ post }) {
+  const { request, loading } = useFetch();
+  const [comments, setComments] = useState([]);
+  
     const [isLiked, setIsLiked] = useState(false);
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [showComments, setShowComments] = useState(false);
@@ -38,21 +42,21 @@ export default function PostCard({ post }) {
             window.speechSynthesis.onvoiceschanged = null;
         };
     }, []);
+  
+  
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const data = await request(`/api/comments/${post.id}`)
+        setComments(data)
+      }
+      catch (err) {
+        console.log('Error fetching comments ', err.message);
+      }
+    }
 
-    const [comments, setComments] = useState([
-        {
-            id: 1,
-            author: 'Jane Smith',
-            content: 'Great post! Very informative.',
-            createdAt: '2024-04-13T11:00:00Z'
-        },
-        {
-            id: 2,
-            author: 'Mike Johnson',
-            content: 'Thanks for sharing this knowledge.',
-            createdAt: '2024-04-13T12:00:00Z'
-        }
-    ]);
+    fetchComments()
+  })
 
     const handleLike = () => {
         setIsLiked(!isLiked);
@@ -100,7 +104,8 @@ export default function PostCard({ post }) {
     };
 
     return (
-        <Card className="mb-4">
+      <Card className="mb-4">
+        { post.image && <Card.Img style={{width: '100%'}} variant="top" src={`data:image/jpg;base64,${post.image}`} />}
             <Card.Header className="d-flex justify-content-between align-items-center">
                 <div>
                     <Card.Title className="mb-0">{post.title}</Card.Title>
