@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Base64;
 import java.util.Optional;
 
 @RestController
@@ -55,7 +56,11 @@ public class ProfileController {
                 User u = user.get();
                 if (request.getUsername() != null) u.setUsername(request.getUsername());
                 if (request.getBio() != null) u.setBio(request.getBio());
-                if (request.getImage() != null) u.setImage(request.getImage());
+                if (request.getImage() != null) {
+                    byte[] imageBytes = Base64.getDecoder().decode(request.getImage());
+                    u.setImage(imageBytes);
+                }
+
 
                 userRepository.save(u);
                 return ResponseEntity.ok("Profile updated successfully");

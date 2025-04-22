@@ -3,8 +3,12 @@ package com.example.backend.controller;
 import com.example.backend.model.Post;
 import com.example.backend.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -19,10 +23,22 @@ public class PostController {
         return postRepository.findAll();
     }
 
-    @PostMapping
-    public Post createPost(@RequestBody Post post) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Post> createPost(
+            @RequestParam("title") String title,
+            @RequestParam("content") String content,
+            @RequestParam(value = "image", required = false) MultipartFile imageFile
+    ) throws IOException {
+        Post post = new Post();
+        post.setTitle(title);
+        post.setContent(content);
         post.setLikes(0);
-        return postRepository.save(post);
+
+        if (imageFile != null && !imageFile.isEmpty()) {
+            post.setImage(imageFile.getBytes());
+        }
+
+        return ResponseEntity.ok(postRepository.save(post));
     }
 
     @PostMapping("/{id}/like")
@@ -37,5 +53,16 @@ public class PostController {
         Post post = postRepository.findById(id).orElseThrow();
         post.setBookmarked(!post.isBookmarked());
         return postRepository.save(post);
+    }
+    @GetMapping("/{id}/image")
+    public ResponseEntity<byte[]> getPostImage(@PathVariable String id) {
+        Post post = postRepository.findById(id).orElse(null);
+        if (post != null && post.getImage() != null) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG) // or IMAGE_PNG based on your image format
+                    .body(post.getImage());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

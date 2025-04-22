@@ -19,7 +19,7 @@ public class User {
 
     private String password;
 
-    private String image;
+    private byte[] image;
 
     private String bio;
 
@@ -43,8 +43,8 @@ public class User {
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
-    public String getImage() { return image; }
-    public void setImage(String image) { this.image = image; }
+    public byte[] getImage() { return image; }  // Updated getter
+    public void setImage(byte[] image) { this.image = image; }
 
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }

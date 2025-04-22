@@ -10,7 +10,7 @@ import java.util.List;
 public class Post {
     @Id
     private String id;
-
+    private byte[] image;
     private String title;
     private String content;
     private int likes;
@@ -39,6 +39,9 @@ public class Post {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+
+    public byte[] getImage() { return image; }
+    public void setImage(byte[] image) { this.image = image; }
 
     public List<String> getCommentIds() { return commentIds; }
     public void setCommentIds(List<String> commentIds) { this.commentIds = commentIds; }
